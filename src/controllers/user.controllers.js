@@ -10,7 +10,6 @@ const getUsers = async (req, res) => {
 
 const createUser = async (req, res) => {
     const { username, firstName, lastName, email, password } = req.body;
-
     try {
         const user = await User.create({
             username,
@@ -23,6 +22,7 @@ const createUser = async (req, res) => {
             message: "User created sucessfull",
         });
     } catch (error) {
+        console.log(error)
         return res.status(500).json({
             message: "User not created",
         });

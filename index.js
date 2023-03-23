@@ -2,20 +2,17 @@
 const express = require("express");
 const { mongoose } = require("./src/libs/mongoose");
 
-
 // Middlewares
 const app = express();
 app.use(express.json());
 
-
-
-
 // Routes
 
-const userRouting = require('./src/routing/user.routing')
-app.use('/', userRouting)
-
-
+const userRouting = require("./src/routing/user.routing");
+app.use("/users", userRouting);
+app.use("/", (req, res) => {
+    res.json("backend working c:");
+});
 
 // connection
 const port = process.env.PORT || 3000;
