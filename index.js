@@ -13,7 +13,7 @@ app.use(express.json());
 // Routes
 
 const userRouting = require('./src/routing/user.routing')
-app.use('/users', userRouting)
+app.use('/', userRouting)
 
 
 
