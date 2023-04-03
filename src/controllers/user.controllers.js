@@ -1,4 +1,6 @@
+const { hashPassword, comparePassword } = require("../libs/bcrypt");
 const User = require("../models/User");
+require("dotenv").config();
 
 const getUsers = async (req, res) => {
     const users = await User.find();
@@ -16,13 +18,13 @@ const createUser = async (req, res) => {
             firstName,
             lastName,
             email,
-            password,
+            password: await hashPassword(password),
         });
         return res.status(201).json({
             message: "User created sucessfull",
         });
     } catch (error) {
-        console.log(error)
+        console.log(error);
         return res.status(500).json({
             message: "User not created",
         });
@@ -70,10 +72,44 @@ const updateUser = async (req, res) => {
     }
 };
 
+const authUser = async (req, res) => {
+    const { email, username, password } = req.body;
+
+    const user = await User.findOne({ email })
+
+    if (user === null) {
+        return res.status(404).json({
+            message: "User not found",
+        });
+    }
+    const encryptedPassword = user.password
+    const isPasswordValid = await comparePassword(password, encryptedPassword);
+
+
+    if (isPasswordValid) {
+        return res.status(200).json({
+            status: true,
+            user: {
+                username: user.username,
+                email: user.email,
+                avatar: user.avatar
+            }
+        });
+    } else {
+        return res.status(401).json({
+            status: false,
+            description: "Bad credentials",
+        });
+    }
+};
+
+
+
 module.exports = {
     createUser,
     getUsers,
     getUserById,
     deleteUser,
     updateUser,
+    authUser,
 };
