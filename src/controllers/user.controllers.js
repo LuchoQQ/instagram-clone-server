@@ -26,6 +26,7 @@ const createUser = async (req, res) => {
     } catch (error) {
         console.log(error);
         return res.status(500).json({
+            status:  500,
             message: "User not created",
         });
     }
@@ -35,7 +36,13 @@ const getUserById = async (req, res) => {
     const { id } = req.params;
     if (!id) return res.json("Wrong User ID");
     try {
-        const user = await User.findById(id);
+        const user = await User.findById(id).select({
+            password: 0,
+            posts: 0,
+            saved_posts: 0,
+            follower: 0,
+            following: 0,
+        });
         if (!user) return res.json("User not found");
         return res.json(user);
     } catch (error) {
@@ -75,16 +82,15 @@ const updateUser = async (req, res) => {
 const authUser = async (req, res) => {
     const { email, username, password } = req.body;
 
-    const user = await User.findOne({ email })
+    const user = await User.findOne({ email });
 
     if (user === null) {
         return res.status(404).json({
             message: "User not found",
         });
     }
-    const encryptedPassword = user.password
+    const encryptedPassword = user.password;
     const isPasswordValid = await comparePassword(password, encryptedPassword);
-
 
     if (isPasswordValid) {
         return res.status(200).json({
@@ -92,8 +98,9 @@ const authUser = async (req, res) => {
             user: {
                 username: user.username,
                 email: user.email,
-                avatar: user.avatar
-            }
+                avatar: user.avatar,
+                id: user.id,
+            },
         });
     } else {
         return res.status(401).json({
@@ -102,8 +109,6 @@ const authUser = async (req, res) => {
         });
     }
 };
-
-
 
 module.exports = {
     createUser,

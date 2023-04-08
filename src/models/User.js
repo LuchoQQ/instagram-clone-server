@@ -8,11 +8,11 @@ const userSchema = new mongoose.Schema(
         },
         firstName: {
             type: String,
-            required:true
+            required: true,
         },
         lastName: {
             type: String,
-            required: true
+            required: true,
         },
         email: {
             type: String,
@@ -22,26 +22,34 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        posts: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Post",
-        },
+        posts: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Post",
+            },
+        ],
         avatar: {
             type: String,
             default: null,
         },
-        follower: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
-        },
-        following: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
-        },
-        saved_posts: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
-        },
+        follower: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User",
+            },
+        ],
+        following: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User",
+            },
+        ],
+        saved_posts: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Posts",
+            },
+        ],
     },
     {
         timestamps: true,
