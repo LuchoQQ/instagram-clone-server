@@ -1,30 +1,26 @@
 const express = require("express");
 const Post = require("../models/Post");
+const {
+    createPost,
+    getAllPosts,
+    deletePostById,
+} = require("../controllers/post.controllers");
 
 const router = express.Router();
 
-router.post("/", async (req, res) => {
-    const { post_owner, description, image } = req.body;
+router.post("/", createPost);
 
-    try {
-        const post = await Post.create({
-            post_owner,
-            description,
-            image,
-        });
+router.get("/", getAllPosts);
 
-        return res.status(201).json({
-            status: 201,
-            message: "Post created sucessfull",
-        });
-    } catch (error) {
-        return res.status(500).json({
-            status: 500,
-            message: "User not created",
-        });
-    }
+router.delete("/:id", deletePostById);
 
-    return;
+// get url file
+router.get("/upload", async (req, res) => {
+    res.json("hello");
 });
 
+// post file
+router.post("/upload", async (req, res) => {
+    console.log(req.files)
+});
 module.exports = router;
