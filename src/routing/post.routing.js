@@ -1,5 +1,4 @@
 const express = require("express");
-const Post = require("../models/Post");
 const {
     createPost,
     getAllPosts,
@@ -10,17 +9,14 @@ const router = express.Router();
 
 router.post("/", createPost);
 
+
 router.get("/", getAllPosts);
 
 router.delete("/:id", deletePostById);
 
 // get url file
-router.get("/upload", async (req, res) => {
-    res.json("hello");
-});
+router.get("/file/:key", async (req, res) => {});
 
 // post file
-router.post("/upload", async (req, res) => {
-    console.log(req.files)
-});
+
 module.exports = router;

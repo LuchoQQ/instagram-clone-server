@@ -1,25 +1,21 @@
+const { uploadImage } = require("../libs/cloudinary");
+const { uploadFile } = require("../libs/s3");
 const Post = require("../models/Post");
 
 const createPost = async (req, res) => {
     const { post_owner, description } = req.body;
-    console.log(req)
+    //console.log(req.files.image.tempFilePath)
+    console.log(req.files);
     try {
+        const result = await uploadImage(req.files.image.tempFilePath);
         await Post.create({
             post_owner,
             description,
-            image,
+            image: result.url,
         });
-
-        return res.status(201).json({
-            status: 201,
-            message: "Post created sucessfull",
-        });
+        return res.json("Created sucessfull");
     } catch (error) {
-        console.log(error)
-        return res.status(500).json({
-            status: 500,
-            message: "Post not created",
-        });
+        console.log(error);
     }
 };
 
