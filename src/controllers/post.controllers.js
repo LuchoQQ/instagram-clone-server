@@ -8,12 +8,13 @@ const createPost = async (req, res) => {
     console.log(req.files);
     try {
         const result = await uploadImage(req.files.image.tempFilePath);
-        await Post.create({
+        const post = await Post.create({
             post_owner,
             description,
             image: result.url,
         });
-        return res.json("Created sucessfull");
+        console.log(post)
+        return res.json(post);
     } catch (error) {
         console.log(error);
     }
